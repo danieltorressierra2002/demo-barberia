@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel · Barbería La Esquina</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f1e33;--navy-2:#162a47;--navy-3:#1d3556;--ivory:#efe9dc;--dim:#c9c3b6;--muted:#98a4b6;--red:#c23a36;--brass:#d9b66a;--ok:#4fbf8a;--line:rgba(239,233,220,.12);--disp:'Barlow Condensed','Arial Narrow',sans-serif;--body:'Barlow',system-ui,sans-serif;color-scheme:dark}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--navy);color:var(--ivory);font:400 1rem/1.5 var(--body);-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+[hidden]{display:none!important}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 18px;border-radius:12px;border:0;background:var(--red);color:#fff;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;box-shadow:inset 0 0 0 1.5px var(--line);color:var(--ivory)}
+.btn.sm{min-height:38px;padding:0 12px;font-size:.9rem}
+.btn.danger{color:#ff9c97}
+input,select{width:100%;min-height:44px;padding:0 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--navy);}
+input:focus,select:focus{border-color:var(--brass);outline:0}
+label{font-size:.85rem;color:var(--muted);display:block;margin-bottom:4px}
+
+/* Acceso */
+.login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.login form{width:min(380px,100%);background:var(--navy-2);padding:28px;border-radius:18px;display:grid;gap:14px;border:1px solid var(--line)}
+.login h1{font:700 2rem/1 var(--disp);text-transform:uppercase}
+.login p{color:var(--muted);font-size:.92rem}
+
+/* App */
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+.side{background:var(--navy-2);padding:20px 14px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;border-right:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font:700 1.3rem/1.1 var(--disp);padding:4px 8px 16px}
+.brand i{width:12px;height:30px;border-radius:6px;background:repeating-linear-gradient(45deg,#c23a36 0 5px,#efe9dc 5px 10px,#3b64a8 10px 15px,#efe9dc 15px 20px);flex:none}
+.tab{text-decoration:none;display:flex;align-items:center;gap:10px;min-height:46px;padding:0 12px;border-radius:12px;border:0;background:none;color:var(--dim);cursor:pointer;text-align:left;font-weight:500;width:100%}
+.tab svg{width:20px;height:20px;flex:none}
+.tab[aria-selected=true]{background:var(--navy-3);color:var(--ivory)}
+.side .sp{flex:1}
+main{padding:28px 28px 40px;max-width:860px;width:100%}
+main h2{font:700 2.3rem/1 var(--disp);text-transform:uppercase;margin-bottom:6px}
+main .sub{color:var(--muted);margin-bottom:22px}
+.card{background:var(--navy-2);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.svc{display:grid;grid-template-columns:1fr 100px 90px;gap:10px 12px;align-items:end}
+.svc .full{grid-column:1/-1}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.actions .sp{flex:1}
+.sw{display:inline-flex;align-items:center;gap:8px;cursor:pointer;color:var(--dim);font-size:.92rem}
+.sw input{width:20px;min-height:20px;accent-color:var(--ok)}
+.off{opacity:.6}
+.pics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pic{background:var(--navy-2);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.pic img{aspect-ratio:1;object-fit:cover;width:100%}
+.pic div{display:flex;gap:6px;padding:8px}
+.pic .btn{flex:1;padding:0 6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hrow{display:grid;grid-template-columns:100px 1fr 1fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+.hrow:last-child{border-bottom:0}
+.top{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--ok);color:#06241a;font-weight:600;padding:10px 18px;border-radius:999px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.toast.bad{background:#ff9c97;color:#3a0b09}
+
+@media (max-width:820px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed;inset:auto 0 0 0;height:auto;flex-direction:row;padding:6px 8px calc(6px + env(safe-area-inset-bottom));border-right:0;border-top:1px solid var(--line);z-index:30;gap:4px}
+  .brand,.side .sp,.side .out{display:none}
+  .tab{flex:1;flex-direction:column;justify-content:center;gap:2px;min-height:54px;font-size:.78rem;padding:0;text-align:center}
+  main{padding:20px 16px 110px}
+  main h2{font-size:2rem}
+  .svc{grid-template-columns:1fr 1fr}
+  .svc .name{grid-column:1/-1}
+  .pics{grid-template-columns:repeat(2,1fr)}
+  .grid2{grid-template-columns:1fr}
+  .hrow{grid-template-columns:1fr 1fr;gap:8px}
+  .hrow strong{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+
+<div class="login" id="login">
+  <form id="login-form">
+    <h1>Panel del local</h1>
+    <p>Esta es una demo: entra con cualquier correo y contraseña.</p>
+    <div><label for="em">Correo</label><input id="em" type="email" autocomplete="email" placeholder="dueno@ejemplo.com"></div>
+    <div><label for="pw">Contraseña</label><input id="pw" type="password" autocomplete="current-password"></div>
+    <button class="btn" type="submit">Entrar</button>
+  </form>
+</div>
+
+<div class="app" id="app" hidden>
+  <aside class="side" role="tablist" aria-label="Secciones">
+    <div class="brand"><i></i><span id="brand">Barbería</span></div>
+    <button class="tab" role="tab" data-tab="servicios" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Servicios</button>
+    <button class="tab" role="tab" data-tab="fotos" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>Fotos</button>
+    <button class="tab" role="tab" data-tab="local" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l1.5-5h15L21 9M4 9v11h16V9M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/></svg>Local</button>
+    <div class="sp"></div>
+    <a class="tab out" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>Ver la web</a>
+  </aside>
+  <main id="main"></main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  var B=Barber,esc=B.esc,D=B.store.get(),tab='servicios';
+  var $=function(s){return document.querySelector(s)};
+  var timer;
+  function toast(m,bad){var t=$('#toast');t.textContent=m;t.className='toast show'+(bad?' bad':'');clearTimeout(timer);timer=setTimeout(function(){t.className='toast'},1800)}
+  function save(){ if(B.store.set(D)) toast('Guardado'); else toast('No se pudo guardar (poco espacio). Quita alguna foto.',true) }
+  function uid(){return 's'+Math.random().toString(36).slice(2,8)}
+
+  /* Acceso de demo */
+  try{ if(sessionStorage.getItem('barber-demo-in')) enter() }catch(e){}
+  $('#login-form').addEventListener('submit',function(e){e.preventDefault();try{sessionStorage.setItem('barber-demo-in','1')}catch(x){}enter()});
+  function enter(){$('#login').hidden=true;$('#app').hidden=false;render()}
+
+  document.querySelectorAll('[data-tab]').forEach(function(b){b.addEventListener('click',function(){
+    tab=b.dataset.tab;document.querySelectorAll('[data-tab]').forEach(function(x){x.setAttribute('aria-selected',x===b)});render();window.scrollTo(0,0)})});
+
+  function render(){
+    $('#brand').textContent=D.name;
+    if(tab==='servicios')servicios();else if(tab==='fotos')fotos();else local();
+  }
+
+  /* ---- Servicios ---- */
+  function servicios(){
+    var h='<h2>Servicios</h2><p class="sub">Cambia nombres, precios y duración. Lo que apagues deja de verse en la web.</p>'+
+      '<div class="top"><button class="btn" id="add">+ Nuevo servicio</button></div>';
+    h+=D.services.map(function(s,i){
+      return '<div class="card'+(s.visible?'':' off')+'" data-i="'+i+'"><div class="svc">'+
+        '<div class="name"><label>Nombre</label><input data-f="name" value="'+esc(s.name)+'"></div>'+
+        '<div><label>Precio ('+esc(D.currency)+')</label><input data-f="price" inputmode="decimal" value="'+esc(s.price)+'"></div>'+
+        '<div><label>Minutos</label><input data-f="min" inputmode="numeric" value="'+esc(s.min)+'"></div>'+
+        '<div class="full"><label>Descripción corta</label><input data-f="desc" value="'+esc(s.desc)+'"></div></div>'+
+        '<div class="actions"><label class="sw"><input type="checkbox" data-f="visible" '+(s.visible?'checked':'')+'> Visible en la web</label><span class="sp"></span>'+
+        '<button class="btn ghost sm" data-a="up" aria-label="Subir"'+(i===0?' disabled':'')+'>↑</button>'+
+        '<button class="btn ghost sm" data-a="down" aria-label="Bajar"'+(i===D.services.length-1?' disabled':'')+'>↓</button>'+
+        '<button class="btn ghost sm" data-a="dup">Duplicar</button>'+
+        '<button class="btn ghost sm danger" data-a="del">Borrar</button></div></div>';
+    }).join('');
+    $('#main').innerHTML=h;
+    $('#add').onclick=function(){D.services.push({id:uid(),name:'Nuevo servicio',desc:'',price:10,min:30,visible:true});save();render();var c=document.querySelectorAll('.card');c[c.length-1].scrollIntoView({block:'center'})};
+    document.querySelectorAll('.card input[data-f]').forEach(function(inp){inp.addEventListener('change',function(){
+      var s=D.services[+inp.closest('.card').dataset.i],f=inp.dataset.f;
+      if(f==='visible'){s.visible=inp.checked;save();render();return}
+      if(f==='price'||f==='min'){var v=parseFloat(String(inp.value).replace(',','.'));if(isNaN(v)||v<0){toast('Escribe un número válido',true);inp.value=s[f];return}s[f]=v}
+      else s[f]=inp.value.trim();
+      save()})});
+    document.querySelectorAll('[data-a]').forEach(function(b){b.addEventListener('click',function(){
+      var i=+b.closest('.card').dataset.i,a=b.dataset.a,L=D.services;
+      if(a==='up'&&i>0){var t=L[i];L[i]=L[i-1];L[i-1]=t}
+      else if(a==='down'&&i<L.length-1){var t2=L[i];L[i]=L[i+1];L[i+1]=t2}
+      else if(a==='dup'){var c=JSON.parse(JSON.stringify(L[i]));c.id=uid();c.name+=' (copia)';L.splice(i+1,0,c)}
+      else if(a==='del'){if(b.dataset.sure!=='1'){b.dataset.sure='1';b.textContent='¿Seguro?';setTimeout(function(){b.dataset.sure='';b.textContent='Borrar'},2500);return}L.splice(i,1)}
+      save();render()})});
+  }
+
+  /* ---- Fotos ---- */
+  function fotos(){
+    var h='<h2>Fotos</h2><p class="sub">Sube fotos de tus trabajos (se reducen solas). Máximo 9.</p>'+
+      '<div class="top"><button class="btn" id="up"'+(D.gallery.length>=9?' disabled':'')+'>+ Subir foto</button><input type="file" id="file" accept="image/*" hidden></div><div class="pics">';
+    h+=D.gallery.map(function(g,i){return '<div class="pic" data-i="'+i+'"><img src="'+esc(g.src)+'" alt="'+esc(g.alt||'')+'"><div><button class="btn ghost sm" data-p="left"'+(i===0?' disabled':'')+' aria-label="Mover antes">←</button><button class="btn ghost sm" data-p="right"'+(i===D.gallery.length-1?' disabled':'')+' aria-label="Mover después">→</button><button class="btn ghost sm danger" data-p="del">Quitar</button></div></div>'}).join('');
+    $('#main').innerHTML=h+'</div>';
+    $('#up').onclick=function(){$('#file').click()};
+    $('#file').onchange=function(){var f=this.files[0];if(!f)return;shrink(f,function(url){if(!url){toast('No se pudo leer la foto',true);return}D.gallery.push({src:url,alt:'Trabajo de barbería'});save();render()})};
+    document.querySelectorAll('[data-p]').forEach(function(b){b.onclick=function(){
+      var i=+b.closest('.pic').dataset.i,L=D.gallery,a=b.dataset.p;
+      if(a==='left'){var t=L[i];L[i]=L[i-1];L[i-1]=t}else if(a==='right'){var t2=L[i];L[i]=L[i+1];L[i+1]=t2}else L.splice(i,1);
+      save();render()}});
+  }
+  function shrink(file,cb){
+    var r=new FileReader();r.onerror=function(){cb(null)};
+    r.onload=function(){var im=new Image();im.onerror=function(){cb(null)};im.onload=function(){
+      var m=720,k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement('canvas');
+      c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+      cb(c.toDataURL('image/jpeg',.78))};im.src=r.result};
+    r.readAsDataURL(file);
+  }
+
+  /* ---- Local ---- */
+  function local(){
+    var h='<h2>Datos del local</h2><p class="sub">Nombre, contacto y horario. Se actualizan en la web al instante.</p>'+
+      '<div class="card"><div class="grid2">'+
+      fld('name','Nombre de la barbería',D.name)+fld('currency','Símbolo de moneda',D.currency)+
+      fld('whatsapp','WhatsApp (con código de país, solo números)',D.whatsapp)+fld('instagram','Instagram (sin @)',D.instagram)+
+      fld('address','Dirección',D.address)+fld('city','Ciudad',D.city)+
+      '</div><div style="margin-top:12px"><label>Frase de portada</label><input data-k="tagline" value="'+esc(D.tagline)+'"></div></div>'+
+      '<div class="card"><label style="margin-bottom:8px">Horario</label>';
+    h+=D.hours.map(function(x,i){return '<div class="hrow" data-h="'+i+'"><strong>'+esc(x.d)+'</strong><input type="time" data-hf="open" value="'+esc(x.open)+'"'+(x.closed?' disabled':'')+'><input type="time" data-hf="close" value="'+esc(x.close)+'"'+(x.closed?' disabled':'')+'><label class="sw" style="margin:0"><input type="checkbox" data-hf="closed" '+(x.closed?'checked':'')+'> Cerrado</label></div>'}).join('');
+    h+='</div><div class="top"><button class="btn ghost" id="reset">Reiniciar demo</button></div>';
+    $('#main').innerHTML=h;
+    document.querySelectorAll('[data-k]').forEach(function(i){i.addEventListener('change',function(){
+      var v=i.value.trim();if(i.dataset.k==='name'&&!v){toast('El nombre no puede estar vacío',true);i.value=D.name;return}
+      D[i.dataset.k]=i.dataset.k==='whatsapp'?v.replace(/\D/g,''):v;save();$('#brand').textContent=D.name})});
+    document.querySelectorAll('[data-hf]').forEach(function(i){i.addEventListener('change',function(){
+      var x=D.hours[+i.closest('.hrow').dataset.h],f=i.dataset.hf;
+      if(f==='closed'){x.closed=i.checked;save();render();return}
+      if(!i.value){i.value=x[f];return}
+      x[f]=i.value;
+      if(x.open>=x.close){toast('La hora de cierre debe ser después de la apertura',true);return}
+      save()})});
+    $('#reset').onclick=function(){var b=this;if(b.dataset.s!=='1'){b.dataset.s='1';b.textContent='¿Seguro? Se borran tus cambios';setTimeout(function(){b.dataset.s='';b.textContent='Reiniciar demo'},3000);return}B.store.reset();D=B.store.get();toast('Demo reiniciada');render()};
+  }
+  function fld(k,l,v){return '<div><label>'+esc(l)+'</label><input data-k="'+k+'" value="'+esc(v)+'"></div>'}
+})();
+</script>
+</body>
+</html>
